@@ -1,0 +1,5 @@
+package com.hardware.managmentsystem.hardwaremanagementsystem.computer.computer_data.hard_drive_size_datasource
+
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface HardDriveSizeRepository: JpaRepository<HardDriveSize, Long>

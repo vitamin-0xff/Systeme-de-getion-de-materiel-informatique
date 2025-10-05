@@ -1,0 +1,7 @@
+package com.hardware.managmentsystem.hardwaremanagementsystem.computer.computer_data.computer_motherboard_chipset_datasource
+
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+
+@Repository
+interface MotherBoardChipsetRepository: JpaRepository<MotherboardChipset, Long>
