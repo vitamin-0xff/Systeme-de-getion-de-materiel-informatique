@@ -18,6 +18,7 @@ class SecurityConfig {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+        .cors { it.configurationSource(corsSourceConfiguration()) }
             .csrf { it.disable() }
             .authorizeHttpRequests { requests ->
 
@@ -42,6 +43,16 @@ class SecurityConfig {
                 .build()
 
         return InMemoryUserDetailsManager(user)
+    }
+
+    fun corsSourceConfiguration(): org.springframework.web.cors.CorsConfigurationSource {
+        val configuration = org.springframework.web.cors.CorsConfiguration()
+        configuration.allowedOrigins = listOf("*")
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        configuration.allowedHeaders = listOf("*")
+        val source = org.springframework.web.cors.UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
     }
 
 

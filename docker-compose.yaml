@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres
-    container_name: postgres_service
+    container_name: hardware_management_solution_postgres_service
     restart: always
     ports:
       - 5432:5432
