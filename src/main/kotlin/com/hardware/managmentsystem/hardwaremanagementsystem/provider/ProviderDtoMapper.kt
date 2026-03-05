@@ -7,7 +7,7 @@ data class ProviderRequest(
     val email: String? = null,
     val phoneNumber: String? = null,
     val businessNumber: String? = null,
-    val imageUrl: String? = null,
+    var imageUrl: String? = null,
     val businessName: String? = null,
     val businessId: String? = null
 )

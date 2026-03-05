@@ -1,5 +1,8 @@
 package com.hardware.managmentsystem.hardwaremanagementsystem.provider
 
+import com.hardware.managmentsystem.hardwaremanagementsystem.services.storage_service.StorageService
+import com.hardware.managmentsystem.hardwaremanagementsystem.utils.base64ToBytes
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -7,11 +10,23 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class ProviderService(private val repo: ProviderRepository) {
+class ProviderService(
+    private val repo: ProviderRepository,
+    @Qualifier("minio-service")
+    private val storageService: StorageService,
+) {
 
     @Transactional
-    fun create(req: ProviderRequest): ProviderResponse =
-        repo.save(req.toEntity()).toResponse()
+    fun create(req: ProviderRequest): ProviderResponse  {
+        val base64Image = req.imageUrl?.split(",")?.getOrNull(1)
+        base64Image?.let {
+            val byteArray = base64ToBytes(base64Image)
+            val uuid = UUID.randomUUID()
+            storageService.upload(byteArray, "$uuid.jpg")
+            req.imageUrl = "$uuid.jpg"
+        }
+        return repo.save(req.toEntity()).toResponse()
+    }
 
     @Transactional(readOnly = true)
     fun list(q: String?, pageable: Pageable): Page<ProviderResponse> =

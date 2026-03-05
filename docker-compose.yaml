@@ -4,8 +4,26 @@ services:
     container_name: hardware_management_solution_postgres_service
     restart: always
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USERNAME: admin
       POSTGRES_DB: management_solution_db
+    volumes:
+      - hardware-management-postgres:/var/lib/postgresql/data
+  minio:
+    image: quay.io/minio/minio:latest
+    container_name: minio-hardware-management-solution
+    ports:
+      - "9007:9000"  # API
+      - "9008:9001"  # Console
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin_admin
+    volumes:
+      - hardware-management-minio:/data
+    command: server /data --console-address ":9001"
+
+volumes:
+  hardware-management-postgres:
+  hardware-management-minio:
